@@ -1,43 +1,52 @@
-'use strict';
+const Discord = require('discord.js');
+const client = new Discord.Client();
+var apiai = require('apiai');
+var config = require('./config');
+var app = apiai(config.Dialogflow);
+console.log(config);
 
-const Discord = require('discord.js'),
-	  client = new Discord.Client();
-
-let apiai = require('apiai'),
-    config = require('./config'),
-    app = apiai(config.Dialogflow);
-
-client.on('ready', () => {
+client.on('ready', function(){
     console.log("I am ready");
     //console.log(client.user.username);
 });
 
-client.on('message', (message) => {
-    if((message.cleanContent.startsWith("@" + client.user.username) || message.channel.type === 'dm') && client.user.id !== message.author.id){
-        // var mess = remove(client.user.username, message.cleanContent);
-        let mess = client.user.username.replace("@" + message.cleanContent + " ", "");
+client.on('message', function(message){
+        if((message.cleanContent.startsWith("@" + client.user.username) || message.channel.type == 'dm') && client.user.id != message.author.id){
+        var mess = remove(client.user.username, message.cleanContent);
+        console.log(mess);
         const user = message.author.id;
-        return new Promise((resolve, reject) => {
-            let request = app.textRequest(mess, {
+        var promise = new Promise(function(resolve, reject) {
+            var request = app.textRequest(mess, {
                 sessionId: user
             });
-            request.on('response', (response) => {
+            request.on('response', function(response) {
                 console.log(response);
-                let rep = response.result.fulfillment.speech;
+                var rep = response.result.fulfillment.speech;
                 resolve(rep);
             });
 
-            request.on('error', (error) => {
+            request.on('error', function(error) {
                 resolve(null);
             });
 
             request.end();
-        }).then((data) =>{
-            message.reply(data);
-            return true;
         });
+
+        (async function(){
+            var result = await promise;
+            if(result){
+                message.reply(result);
+            } else{
+                message.reply("nothing here");
+            }
+        }());
+
     }
-    return true;
 });
+
+
+function remove(username, text){
+    return text.replace("@" + username + " ", "");
+}
 
 client.login(config.Discord);
