@@ -1,6 +1,6 @@
 {
   "name": "dragonSpellbookDiscordBot",
-  "description": "Cloud Functions for Firebase",
+  "description": "Discord bot for Dragon Spellbook",
   "scripts": {
     "lint": "eslint .",
     "start": "node index"

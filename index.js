@@ -40,5 +40,4 @@ client.on('message', (message) => {
     return true;
 });
 
-
 client.login(config.Discord);
