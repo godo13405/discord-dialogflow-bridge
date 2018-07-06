@@ -1,43 +1,37 @@
 'use strict';
 
-const Discord = require('discord.js'),
-	  client = new Discord.Client();
+const Discord = require('discord.io'),
+	config = require('./config.js');
 
-let apiai = require('apiai'),
-    config = require('./config'),
-    agent = apiai(config.Dialogflow);
-
-client.on('ready', () => {
-    console.log("I am ready");
-    //console.log(client.user.username);
+const bot = new Discord.Client({
+    token: config.Discord,
+    autorun: true
 });
 
-client.on('message', (message) => {
-    if((message.cleanContent.startsWith("@" + client.user.username) || message.channel.type === 'dm') && client.user.id !== message.author.id){
-        // var mess = remove(client.user.username, message.cleanContent);
-        let mess = client.user.username.replace("@" + message.cleanContent + " ", "");
-        const user = message.author.id;
-        return new Promise((resolve, reject) => {
-            let request = agent.textRequest(mess, {
-                sessionId: user
-            });
-            request.on('response', (response) => {
-                console.log(response);
-                let rep = response.result.fulfillment.speech;
-                resolve(rep);
-            });
+bot.on('ready', function() {
+    console.log('Logged in as %s - %s\n', bot.username, bot.id);
+});
 
-            request.on('error', (error) => {
-                resolve(null);
-            });
-
-            request.end();
-        }).then((data) =>{
-            message.reply(data);
-            return true;
+bot.on('message', function(user, userID, channelID, message, event) {
+    if (message === "ping") {
+        bot.sendMessage({
+            to: channelID,
+            message: "pong"
         });
     }
-    return true;
 });
 
-client.login(config.Discord);
+
+if (process.env.SERVE) {
+	const express = require('express');
+	const ex = express();
+
+	// ex.use(bodyParser.json());
+	ex.post('/', () => {
+		return bot;
+	});
+	let port = process.env.PORT || 3001;
+	ex.listen(port, () => {
+	  if (!process.env.SILENT) console.log('Spell Book is open on port '+port);
+	});
+}
