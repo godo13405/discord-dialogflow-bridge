@@ -1,37 +1,33 @@
 'use strict';
 
-const Discord = require('discord.io'),
-	config = require('./config.js');
+const Discord = require('discord.js'),
+  auth = require('./config.js');
 
-const bot = new Discord.Client({
-    token: config.Discord,
-    autorun: true
+const client = new Discord.Client();
+
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
 });
 
-bot.on('ready', function() {
-    console.log('Logged in as %s - %s\n', bot.username, bot.id);
+client.on('message', msg => {
+  if (msg.content === 'ping') {
+    msg.reply('Pong!');
+  }
 });
 
-bot.on('message', function(user, userID, channelID, message, event) {
-    if (message === "ping") {
-        bot.sendMessage({
-            to: channelID,
-            message: "pong"
-        });
-    }
-});
-
+client.login(auth.Discord);
+console.log(client);
 
 if (process.env.SERVE) {
-	const express = require('express');
-	const ex = express();
+  const express = require('express');
+  const ex = express();
 
-	// ex.use(bodyParser.json());
-	ex.post('/', () => {
-		return bot;
-	});
-	let port = process.env.PORT || 3001;
-	ex.listen(port, () => {
-	  if (!process.env.SILENT) console.log('Spell Book is open on port '+port);
-	});
+  // ex.use(bodyParser.json());
+  ex.post('/', () => {
+    return client;
+  });
+  let port = process.env.PORT || 3001;
+  ex.listen(port, () => {
+    if (!process.env.SILENT) console.log('Spell Book is open on port ' + port);
+  });
 }
