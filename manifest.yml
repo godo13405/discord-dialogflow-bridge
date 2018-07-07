@@ -1,4 +1,4 @@
 ---
 applications:
 - name: discord-dialogflow-bridge
-  memory: 56M
+  memory: 50M
