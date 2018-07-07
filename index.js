@@ -13,7 +13,6 @@ const sessionClient = new dialogflow.SessionsClient();
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
 const auth = require('./config');
-console.log(auth);
 
 
 // The text query request.
