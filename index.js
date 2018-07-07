@@ -1,10 +1,9 @@
 'use strict';
 const Discord = require('discord.js'),
-  auth = require('./config.js'),
   projectId = 'dnd-wiki-ca7bd',
   sessionId = 'quickstart-session-id',
-  languageCode = 'en';
-
+  languageCode = 'en',
+	fs = require('fs');
 
 // Instantiate a DialogFlow client.
 const dialogflow = require('dialogflow');
@@ -12,6 +11,19 @@ const sessionClient = new dialogflow.SessionsClient();
 
 // Define session path
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+
+const enigma = require('./enigma');
+
+let temp = JSON.stringify({
+	dialogflow: "1e8cb01366014799a6dd73f62be9a008",
+	discord: "NDUxMDQyODUyODg2MTUxMTY4.DiJFhg._imDrOl5ct6lqRC5MzP4rrKXMJU"
+});
+console.log(process.env);
+temp = enigma.encrypt(temp);
+fs.writeFile('./config', temp);
+let auth = fs.readFileSync('./config', 'utf8');
+auth = enigma.decrypt(auth);
+console.log(auth);
 
 // The text query request.
 const request = {
@@ -44,6 +56,7 @@ function dialogflowBridge(input, self) {
 const client = new Discord.Client();
 
 client.on('ready', () => {
+	client.user.setUsername("Dragon Book");
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -63,4 +76,4 @@ client.on('message', msg => {
   }
 });
 
-client.login(auth.Discord);
+// client.login(auth.Discord);
