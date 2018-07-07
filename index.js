@@ -12,7 +12,9 @@ const sessionClient = new dialogflow.SessionsClient();
 // Define session path
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
-let auth = require('./config');
+const auth = require('./config');
+console.log(auth);
+
 
 // The text query request.
 const request = {
@@ -65,4 +67,4 @@ client.on('message', msg => {
   }
 });
 
-// client.login(auth.Discord);
+client.login(auth.discord);
