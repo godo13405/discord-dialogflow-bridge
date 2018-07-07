@@ -12,16 +12,7 @@ const sessionClient = new dialogflow.SessionsClient();
 // Define session path
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
-const enigma = require('./enigma');
-
-// let temp = JSON.stringify({
-// 	dialogflow: "1e8cb01366014799a6dd73f62be9a008",
-// 	discord: "NDUxMDQyODUyODg2MTUxMTY4.DiJFhg._imDrOl5ct6lqRC5MzP4rrKXMJU"
-// });
-// temp = enigma.encrypt(temp);
-// fs.writeFile('./config', temp);
-let auth = fs.readFileSync('./config', 'utf8');
-auth = enigma.decrypt(auth);
+let auth = require('./config');
 
 // The text query request.
 const request = {

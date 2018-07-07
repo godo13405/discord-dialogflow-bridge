@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
+    "postinstall": "node decode-keys",
     "start": "GOOGLE_APPLICATION_CREDENTIALS=service-key.json node index",
     "ngrok": "./ngrok http 3001"
   },
