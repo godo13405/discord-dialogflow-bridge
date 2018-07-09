@@ -66,9 +66,4 @@ client.on('message', msg => {
   }
 });
 
-client.login(auth.discord).then(x => {
-	console.log('Bot ready and listening on port ' + process.env.PORT);
-})
-.catch(err => {
-	console.error('ERROR:', err);
-});
+client.login(auth.discord);
