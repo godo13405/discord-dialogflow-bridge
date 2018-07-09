@@ -60,10 +60,15 @@ client.on('message', msg => {
 			if (!x || !x.length) {
 				x = 'I can\'t find my magic book right now... Please try again later.';
 			}
-      console.log('Dragon says: ', x[0].queryResult.fulfillmentText);
+      console.log('Bot says: ', x[0].queryResult.fulfillmentText);
       return msg.reply(x[0].queryResult.fulfillmentText);
     });
   }
 });
 
-client.login(auth.discord);
+client.login(auth.discord).then(x => {
+	console.log('Bot ready and listening on port ' + process.env.PORT);
+})
+.catch(err => {
+	console.error('ERROR:', err);
+});
