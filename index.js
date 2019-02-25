@@ -1,6 +1,6 @@
 'use strict';
 const Discord = require('discord.js'),
-  projectId = 'dnd-wiki-ca7bd',
+  projectId = 'spellbook-7ccae ',
   sessionId = 'quickstart-session-id',
   languageCode = 'en',
 	fs = require('fs');
